@@ -11,36 +11,84 @@ import cozmo
 import cv2
 import numpy as np
 import sys
+import math
+
+max_speed = 70.0
+
+def sense_brightnesses(image):
+	
+	def sense_brightness(image, sensor_region):
+		'''Maps a sensor reading to a wheel motor command
+		Return the brightness of sensor_region as 0..1
+		'''
+		h = image.shape[0]
+		ws = sensor_region.shape[0]
+		avg_brightness = 0
+
+		for y in range(0, h):
+			for x in sensor_region:
+				avg_brightness += image[y,x]
+
+		avg_brightness /= (h * ws)
+		avg_brightness /= 256.0
+		print(f"brightness a {avg_brightness}")
+		# if avg_brightness > .7:
+		# 	avg_brightness = .7
+		# if avg_brightness < .3:
+		# 	avg_brightness = .3
+		# print(f"brightness b {avg_brightness}")
+		return avg_brightness
+
+	image_width = image.shape[1]
+
+	## Decide on the number of columns to use; here we treat the camera as two halves: left sensor, right sensor
+	sensor_width = int(image_width/2)
+	sensor_right = sense_brightness(image, sensor_region=np.arange(image_width-sensor_width, image_width))
+	sensor_left = sense_brightness(image, sensor_region=np.arange(0, sensor_width))
+
+	return sensor_left, sensor_right
 
 
-def sense_brightness(image, rows):
+def ipsilateral(f, left_sensor_value, right_sensor_value):
 	'''Maps a sensor reading to a wheel motor command'''
-	## TODO: Test that this function works and decide on the number of rows to use
+	return f(left_sensor_value), f(right_sensor_value)
 
-	h = image.shape[0]
-	w = image.shape[1]
-	avg_brightness = 0
-
-	for y in range(0, h):
-		for x in rows:
-			avg_brightness += image[y,x]
-
-	avg_brightness /= (h*rows.shape[0])
-
-	return avg_brightness
-
-def mapping_funtion(sensor_value):
+def contralateral(f, left_sensor_value, right_sensor_value):
 	'''Maps a sensor reading to a wheel motor command'''
-	## TODO: Define the mapping to obtain different behaviors.
-	motor_value = 0.1*sensor_value
-	return motor_value
+	return f(right_sensor_value), f(left_sensor_value)
+
+def positive(s):
+	t = max_speed * s
+	print(f"positive s {s}; {t}")
+	# s is the relative brightness, ranging from 0 .. 1
+	return max_speed * s
+
+def inhibitory(s):
+	t = max_speed * (1.0 - s)
+	print(f"inhibitory s {s}; {t}")
+	return max_speed * (1.0 - s)
+
+def fear(left_sensor_value, right_sensor_value):
+	return ipsilateral(positive, left_sensor_value, right_sensor_value)
+
+def aggression(left_sensor_value, right_sensor_value):
+	return contralateral(positive, left_sensor_value, right_sensor_value)
+
+def liking(left_sensor_value, right_sensor_value):
+	return ipsilateral(inhibitory, left_sensor_value, right_sensor_value)
+
+def love(left_sensor_value, right_sensor_value):
+	return contralateral(inhibitory, left_sensor_value, right_sensor_value)
 
 async def braitenberg_machine(robot: cozmo.robot.Robot):
 	'''The core of the braitenberg machine program'''
+
 	# Move lift down and tilt the head up
 	robot.move_lift(-3)
-	robot.set_head_angle(cozmo.robot.MAX_HEAD_ANGLE).wait_for_completed()
+	robot.set_head_angle(cozmo.robot.util.degrees(0)).wait_for_completed()
 	print("Press CTRL-C to quit")
+
+	print("sensor_right,sensor_left,  motor_right,motor_left")
 
 	while True:
 		
@@ -49,28 +97,20 @@ async def braitenberg_machine(robot: cozmo.robot.Robot):
 
 		#convert camera image to opencv format
 		opencv_image = cv2.cvtColor(np.asarray(event.image), cv2.COLOR_RGB2GRAY)
-		# Determine the w/h of the new image
-		h = opencv_image.shape[0]
-		w = opencv_image.shape[1]
-		sensor_n_rows = 20
 
 		# Sense the current brightness values on the right and left of the image.
-		sensor_right = sense_brightness(opencv_image, rows=np.arange(sensor_n_rows))
-		sensor_left = sense_brightness(opencv_image, rows=np.arange(w-sensor_n_rows, w))
-
-		print("sensor_right: " + str(sensor_right))
-		print("sensor_left: " + str(sensor_left))
+		(sensor_left, sensor_right) = sense_brightnesses(opencv_image)
 
 		# Map the sensors to actuators
-		## TODO: You might want to switch which sensor is mapped to which motor.
-		motor_right = mapping_funtion(sensor_left)
-		motor_left = mapping_funtion(sensor_right)
+		# (motor_left, motor_right) = fear(sensor_left, sensor_right)
+		# (motor_left, motor_right) = aggression(sensor_left, sensor_right)
+		# (motor_left, motor_right) = liking(sensor_left, sensor_right)
+		(motor_left, motor_right) = love(sensor_left, sensor_right)
 
-		print("motor_right: " + str(motor_right))
-		print("motor_left: " + str(motor_left))
+		print(f"{sensor_right},{sensor_left},    {motor_right},{motor_left}")
 
 		# Send commands to the robot
-		await robot.drive_wheels(motor_right, motor_left)
+		await robot.drive_wheels(motor_left, motor_right)
 
 		time.sleep(.1)
 
