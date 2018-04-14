@@ -51,6 +51,8 @@ def sense_brightnesses(image):
 	sensor_right = sense_brightness(image, sensor_width, sensor_width, normal)
 	return sensor_left, sensor_right
 
+
+
 def sense_brightnesses2(image):
 	def sense_brightness(image, leftmost_x, sensor_width):
 		h = image.shape[0]
@@ -72,6 +74,9 @@ def sense_brightnesses2(image):
 	total = sensor_left + sensor_right
 	return apply_sensor_threshhold(sensor_left/maximum), apply_sensor_threshhold(sensor_right/maximum)
 
+
+
+
 def ipsilateral(f, left_sensor_value, right_sensor_value):
 	'''Maps a sensor reading to a wheel motor command'''
 	return f(left_sensor_value), f(right_sensor_value)
@@ -79,6 +84,8 @@ def ipsilateral(f, left_sensor_value, right_sensor_value):
 def contralateral(f, left_sensor_value, right_sensor_value):
 	'''Maps a sensor reading to a wheel motor command'''
 	return f(right_sensor_value), f(left_sensor_value)
+
+
 
 def positive(s):
 	return max_speed * s + 32
@@ -97,6 +104,8 @@ def liking(left_sensor_value, right_sensor_value):
 
 def love(left_sensor_value, right_sensor_value):
 	return contralateral(inhibitory, left_sensor_value, right_sensor_value)
+
+
 
 def log(left_sensor, right_sensor, left_motor, right_motor):
 	light_threshhold = 0
@@ -118,6 +127,8 @@ def log(left_sensor, right_sensor, left_motor, right_motor):
 	print("-")
 	print(f"  {left_sensor},{right_sensor}: LIGHT {light_dir}")
 	print(f"  {left_motor},{right_motor}:  {go_dir}")
+
+
 
 def makeDriver(strategy):
 	async def braitenberger(robot: cozmo.robot.Robot):
@@ -152,5 +163,8 @@ def makeDriver(strategy):
 			time.sleep(.1)
 	return braitenberger
 
-cozmo.camera.Camera.enable_auto_exposure = False
-cozmo.run_program(makeDriver(love), use_viewer=True, force_viewer_on_top=True)
+def go(behaviour):
+    cozmo.camera.Camera.enable_auto_exposure = False
+    cozmo.run_program(makeDriver(behaviour), use_viewer=True, force_viewer_on_top=True)
+
+go(love)
