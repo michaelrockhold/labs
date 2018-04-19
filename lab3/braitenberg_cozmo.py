@@ -167,4 +167,8 @@ def go(behaviour):
     cozmo.camera.Camera.enable_auto_exposure = False
     cozmo.run_program(makeDriver(behaviour), use_viewer=True, force_viewer_on_top=True)
 
-go(love)
+if __name__ == "__main__":
+	go(fear)
+	# go(aggression)
+	# go(liking)
+	# go(love)
