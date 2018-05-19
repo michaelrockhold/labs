@@ -12,8 +12,9 @@ import time
 import sys
 
 from odometry import cozmo_go_to_pose
+
 sys.path.insert(0, '../lab6')
-from pose_transform import get_relative_pose
+import pose_transform
 
 def move_relative_to_cube(robot: cozmo.robot.Robot):
 	'''Looks for a cube while sitting still, when a cube is detected it 
@@ -21,13 +22,14 @@ def move_relative_to_cube(robot: cozmo.robot.Robot):
 
 	robot.move_lift(-3)
 	robot.set_head_angle(degrees(0)).wait_for_completed()
-	cube = None
+	cube_w = None
 
-	while cube is None:
+	while cube_w is None:
 		try:
-			cube = robot.world.wait_for_observed_light_cube(timeout=30)
-			if cube:
-				print("Found a cube, pose in the robot coordinate frame: %s" % get_relative_pose(cube.pose, robot.pose))
+			cube_w = robot.world.wait_for_observed_light_cube(timeout=30)
+			if cube_w:
+				print("Found a cube, pose in the robot coordinate frame: %s" % pose_transform.get_relative_pose(cube_w.pose, robot.pose))
+				break
 		except asyncio.TimeoutError:
 			print("Didn't find a cube")
 
@@ -35,11 +37,13 @@ def move_relative_to_cube(robot: cozmo.robot.Robot):
 
 	# ####
 	# TODO: Make the robot move to the given desired_pose_relative_to_cube.
-	# Use the get_relative_pose function your implemented to determine the
+	# Use the get_relative_pose function you implemented to determine the
 	# desired robot pose relative to the robot's current pose and then use
 	# one of the go_to_pose functions you implemented in Lab 6.
 	# ####
 
+	pose_relative_to_world = pose_transform.getWorldPoseOfRelativeObject(desired_pose_relative_to_cube, robot.pose)
+	print("destination pose in the world coordinate frame: %s" % pose_transform.format_pose(pose_relative_to_world))
 
 if __name__ == '__main__':
 
