@@ -38,49 +38,58 @@ class ImageClassifier:
 
     def extract_image_features(self, data):
         # extract feature vector from image data
-        def extract(image):
-            return feature.hog(color.rgb2gray(image), orientations=8, pixels_per_cell=(16, 16), cells_per_block=(1, 1), block_norm='L2-Hys')
-        return [extract(image) for image in data]
+        return [self.features_from_image(image) for image in data]
+
+    def extract_features_and_labels(self, dir):
+        # load images
+        (raw_data, labels) = self.load_data_from_folder(dir)
+        # convert images into features
+        data = self.extract_image_features(raw_data)
+        return(data, labels)
 
     def train_classifier(self, train_data, train_labels):
         # train the classifier
         self.classifier.fit(train_data, train_labels)
 
     def predict_labels(self, data):
-        # Please do not modify the header
         # predict labels of test data using trained model in self.classifier
         return self.classifier.predict(data)
+
+    def prep(self,dir):
+        (train_data, train_labels) = self.extract_features_and_labels('./train/')
+        # train model
+        self.train_classifier(train_data, train_labels)
+        return(train_data, train_labels)
+
+    def predictAndReport(self, title, data, labels):
+        predicted_labels = self.predict_labels(data)
+        print(title)
+        report(data, labels, predicted_labels)
+
+    def features_from_image(self, image):
+        return feature.hog(color.rgb2gray(image), orientations=8, pixels_per_cell=(16, 16), cells_per_block=(1, 1), block_norm='L2-Hys')
+
+
+def report(data, labels, predicted_labels):
+    print("=============================")
+    print("Confusion Matrix:\n",metrics.confusion_matrix(labels, predicted_labels))
+    print("Accuracy: ", metrics.accuracy_score(labels, predicted_labels))
+    print("F1 score: ", metrics.f1_score(labels, predicted_labels, average='micro'))
 
 def main():
 
     img_clf = ImageClassifier()
 
-    # load images
-    (train_raw, train_labels) = img_clf.load_data_from_folder('./train/')
-    (test_raw, test_labels) = img_clf.load_data_from_folder('./test/')
-
-    # convert images into features
-    train_data = img_clf.extract_image_features(train_raw)
-    test_data = img_clf.extract_image_features(test_raw)
-
-    # train model
-    img_clf.train_classifier(train_data, train_labels)
+    # train the classifier
+    (train_data, train_labels) = img_clf.prep('./train/')
 
     # apply the trained classifier to the training data
-    predicted_labels = img_clf.predict_labels(train_data)
-    print("\nTraining results")
-    print("=============================")
-    print("Confusion Matrix:\n",metrics.confusion_matrix(train_labels, predicted_labels))
-    print("Accuracy: ", metrics.accuracy_score(train_labels, predicted_labels))
-    print("F1 score: ", metrics.f1_score(train_labels, predicted_labels, average='micro'))
+    img_clf.predictAndReport("\nTraining results", train_data, train_labels)
 
     # test model
-    predicted_labels = img_clf.predict_labels(test_data)
-    print("\nTest results")
-    print("=============================")
-    print("Confusion Matrix:\n",metrics.confusion_matrix(test_labels, predicted_labels))
-    print("Accuracy: ", metrics.accuracy_score(test_labels, predicted_labels))
-    print("F1 score: ", metrics.f1_score(test_labels, predicted_labels, average='micro'))
+    (test_data, test_labels) = img_clf.extract_features_and_labels('./test/')
+
+    img_clf.predictAndReport("\nTest results", test_data, test_labels)
 
 
 if __name__ == "__main__":
