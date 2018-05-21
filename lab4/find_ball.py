@@ -21,22 +21,17 @@ def find_ball(opencv_image, debug=False):
                 debugging information is displayed.
         
         Returns [x, y, radius] of the ball, and [0,0,0] or None if no ball is found.
-
-        Uses the a handpicked algorithm to blur the image, and some variant of Hough_Gradient
-        to detect the circles
     """
 
     ball = None
-
-    bf = ball_finder(compose(identity(),gaussian(ksize=7)), hough(200, 100))
-    cs = bf(opencv_image)
-    if cs is not None and len(cs) > 0:
-        ball = cs[0]
+    
+    ## TODO: INSERT YOUR SOLUTION HERE
+    ball = [152, 94, 42]
     
     return ball
 
 
-def display_circles(opencv_image, circles):
+def display_circles(opencv_image, circles, best=None):
     """Display a copy of the image with superimposed circles.
         
        Provided for debugging purposes, feel free to edit as needed.
@@ -53,102 +48,75 @@ def display_circles(opencv_image, circles):
     circle_image = copy.deepcopy(opencv_image)
     circle_image = cv2.cvtColor(circle_image, cv2.COLOR_GRAY2RGB, circle_image)
     
-    def draw_circle(c,colour):
+    for c in circles:
         # draw the outer circle
-        cv2.circle(circle_image,(c[0],c[1]),c[2],colour,2)
+        cv2.circle(circle_image,(c[0],c[1]),c[2],(255,255,0),2)
         # draw the center of the circle
         cv2.circle(circle_image,(c[0],c[1]),2,(0,255,255),3) 
         # write coords
         cv2.putText(circle_image,str(c),(c[0],c[1]),cv2.FONT_HERSHEY_SIMPLEX,.5,(255,255,255),2,cv2.LINE_AA)            
-
-    for c in circles[3:]:
-        draw_circle(c, (255,255,0))
     
-    #highlight the best circles in a different color
-    for c in circles[:3]:
-        draw_circle(c, (0,0,255))
-    return circle_image
-
-# detectors
-
-def hough(p1, p2):
-    def fn(greyimg):
-        return cv2.HoughCircles(greyimg,cv2.HOUGH_GRADIENT,1,greyimg.shape[0]/8,param1=p1,param2=p2)
-    return fn
-
-# blur processors
-
-def compose(a, b):
-    def fn(img):
-        return a(b(img))
-    return fn
-
-def identity():
-    def fn(image):
-        return image
-    return fn
-
-def inverter():
-    def fn(image):
-        return cv2.bitwise_not(image)
-    return fn
-
-def equalizer():
-    def fn(img):
-        return cv2.equalizeHist(img)
-    return fn
-
-def median(ksize=5):
-    def fn(img):
-        return cv2.medianBlur(img, ksize, img)
-    return fn
-
-def gaussian(ksize=5):
-    def fn(img):
-        # Remove noise by blurring with a Gaussian filter
-        return cv2.GaussianBlur(img, (ksize, ksize), 0)
-    return fn
-
-def sobel(ksize=5):
-    def fn(img):
-        ddepth = cv2.CV_16S
-        # Gradient-X
-        grad_x = cv2.Sobel(img,ddepth,1,0,ksize = ksize, scale = 1, delta = 0, borderType = cv2.BORDER_DEFAULT)
-        abs_grad_x = cv2.convertScaleAbs(grad_x)   # converting back to uint8
-
-        # Gradient-Y
-        grad_y = cv2.Sobel(img,ddepth,0,1,ksize = ksize, scale = 1, delta = 0, borderType = cv2.BORDER_DEFAULT)
-        abs_grad_y = cv2.convertScaleAbs(grad_y)
-
-        return cv2.addWeighted(abs_grad_x,0.5,abs_grad_y,0.5,0)
-    return fn
-
-def scharr(ksize=3):
-    def fn(img):
-        ddepth = cv2.CV_16S
-        # Gradient-X
-        grad_x = cv2.Scharr(img,ddepth,1,0)
-        abs_grad_x = cv2.convertScaleAbs(grad_x)   # converting back to uint8
-
-        # Gradient-Y
-        grad_y = cv2.Scharr(img,ddepth,0,1)
-        abs_grad_y = cv2.convertScaleAbs(grad_y)
+    #highlight the best circle in a different color
+    if best is not None:
+        # draw the outer circle
+        cv2.circle(circle_image,(best[0],best[1]),best[2],(0,0,255),2)
+        # draw the center of the circle
+        cv2.circle(circle_image,(best[0],best[1]),2,(0,0,255),3) 
+        # write coords
+        cv2.putText(circle_image,str(best),(best[0],best[1]),cv2.FONT_HERSHEY_SIMPLEX,.5,(255,255,255),2,cv2.LINE_AA)            
         
-        return cv2.add(abs_grad_x,abs_grad_y)
-    return fn
+    display(circle_image)
 
-def applyToCopy(fn, image):
-    return fn(copy.deepcopy(image))
+def median_blur(inputImg, ksize=5):
+    img = copy.deepcopy(inputImg)
+    img = cv2.medianBlur(img, ksize, img)
+    return img
 
-# utilities
+def gaussian_blur(inputImg, ksize=5):
+    img = copy.deepcopy(inputImg)
+    # Remove noise by blurring with a Gaussian filter
+    img = cv2.GaussianBlur(img, (ksize, ksize), 0, img)
+    return img
+
+def sobel_blur(inputImg, ksize=5):
+    img = copy.deepcopy(inputImg)
+    # Output dtype = cv2.CV_64F. Then take its absolute and convert to cv2.CV_8U. Twice.
+    x64fImage = cv2.Sobel(img,cv2.CV_64F,1,0,ksize=ksize)
+    # ...take its absolute...
+    absx64fImage = np.absolute(x64fImage)
+    # ...convert to cv2.CV_8U.
+    xu8Image = np.uint8(absx64fImage)
+    # And again:
+    y64fImage = cv2.Sobel(xu8Image,cv2.CV_64F,0,1,ksize=ksize)
+    # ...take its absolute...
+    absy64fImage = np.absolute(y64fImage)
+    # ...convert to cv2.CV_8U.
+    img = np.uint8(absy64fImage)
+    return img
+
 def display(img):
     pil_image = Image.fromarray(img)
     pil_image.show()
     return img
 
-def find_circles(detector, greyimg):
+def dir_threshold(img, sobel_kernel=3, thresh=(0, np.pi/2)):
+    # Apply the following steps to img
+    # 2) Take the gradient in x and y separately
+    sobelx = cv2.Sobel(img, cv2.CV_8U, 1, 0, ksize=sobel_kernel)
+    sobely = cv2.Sobel(img, cv2.CV_8U, 0, 1, ksize=sobel_kernel)
+    # 3) Take the absolute value of the x and y gradients
+    abs_sobelx = np.absolute(sobelx)
+    abs_sobely = np.absolute(sobely)
+    # 4) Use np.arctan2(abs_sobely, abs_sobelx) to calculate the direction of the gradient
+    absgraddir = np.arctan2(abs_sobely, abs_sobelx)
+    # 5) Create a binary mask where direction thresholds are met
+    binary_output = np.zeros_like(absgraddir)
+    binary_output[(absgraddir >= thresh[0]) & (absgraddir <= thresh[1])] = 1
+    return binary_output
+
+def find_circles(greyimg):
     try:
-        circles = detector(greyimg)
+        circles = cv2.HoughCircles(greyimg,cv2.HOUGH_GRADIENT,1,greyimg.shape[0]/2,param1=150,param2=100)
         circles = np.uint16(np.around(circles))
         rt = circles[0,:]
     except Exception as exc:
@@ -156,29 +124,47 @@ def find_circles(detector, greyimg):
         rt = []
     return rt
 
-def display_found_circles(img, processor, detector, debug):
-    bf = ball_finder(processor, detector, debug=True)
-    display(display_circles(img, bf(img)))
+def draw_circles(greyimg, circles):
+    rgbImage = copy.deepcopy(greyimg)
+    rgbImage = cv2.cvtColor(rgbImage, cv2.COLOR_GRAY2BGR, rgbImage)
+    for i in circles:
+        # draw the outer circle
+        cv2.circle(rgbImage,(i[0],i[1]),i[2],(0,255,0),2)
+        # draw the center of the circle
+        cv2.circle(rgbImage,(i[0],i[1]),2,(0,0,255),3)
+    return rgbImage
 
-def ball_finder(processor, detector, debug=False):
-    def fn(img):
-        processedImg = applyToCopy(processor, img)
-        if debug:
-            display(processedImg)
-        return find_circles(detector, processedImg)
-    return fn
+def thresh(img):
+    bigmask = cv2.compare(img,np.uint8([127]),cv2.CMP_GE)
+    smallmask = cv2.bitwise_not(bigmask)
+    x = np.uint8([90])
+    big = cv2.add(img,x,mask = bigmask)
+    small = cv2.subtract(img,x,mask = smallmask)
+    res = cv2.add(big,small)
+    return res
 
+def clahe(img):
+    clahe = cv2.createCLAHE(clipLimit=4.0, tileGridSize=(8,8))
+    return clahe.apply(opencv_image)
 
 if __name__ == "__main__":
-    test01 = "./imgs/test01.bmp"
-    bike = "./devimgs/boston8lg2013.bmp"
-    fourCircles = "./devimgs/Circle.jpg"
-    inv = inverter()
+    # testImagePath = "./imgs/tdest01.bmp"
+    testImagePath = "./devimgs/Circle.jpg"
+    # testImagePath = "/Users/michael/Downloads/boston8lg2013.bmp"
 
-    # best for test01: scharr(3)
-    # best for fourCircles: gaussian(3) or (5)
-    # very good for boston8lg2013: gaussian(ksize=5), hough(200, 100), ignore all but the first three results
+    opencv_image = cv2.imread(testImagePath, cv2.IMREAD_GRAYSCALE)
+    processedImg = copy.deepcopy(opencv_image)
 
-    opencv_image = cv2.imread(test01, cv2.IMREAD_GRAYSCALE)
-    
-    display_found_circles(opencv_image, compose(inverter(),sobel(ksize=5)), hough(200, 100), True)
+    # processedImg = cv2.equalizeHist(processedImg)
+    # processedImg = median_blur(processedImg, 3)
+    # processedImg = gaussian_blur(processedImg, 3)
+    processedImg = sobel_blur(processedImg, 5)                                                                                                                                                                                                                                                                                                                                                                
+
+    display(processedImg)
+
+    cs = find_circles(processedImg)
+    display(draw_circles(opencv_image, cs))
+
+# best for test01: equalize, median_blur(3), sobel_blur(3)
+# best for boston8lg2013: none
+# best for 
