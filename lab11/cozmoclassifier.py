@@ -5,7 +5,8 @@ import time
 import asyncio
 import numpy as np
 import imgclassification
-from skimage import io, color
+from skimage import color
+import cv2 as cv2
 
 try:
     from PIL import Image
@@ -19,8 +20,8 @@ class Bot:
     def __init__(self, robot):
         self.robot = robot
 
-    def say_label(self, label):
-        self.robot.say_text(label).wait_for_completed()
+    async def say_label(self, label):
+        await self.robot.say_text(label).wait_for_completed()
 
     def wave_hi(self):
         self.robot.set_all_backpack_lights(cozmo.lights.green_light)
@@ -29,24 +30,36 @@ class Bot:
         time.sleep(1)
         # turn off Cozmo's backpack lights
         self.robot.set_all_backpack_lights(cozmo.lights.off_light)
+        time.sleep(1)
+
+    async def celebrate(self, label):
+        await self.say_label(label)
+        self.wave_hi()
+
+
+
+classifier = imgclassification.ImageClassifier()
+(data, labels) = classifier.prep('./train/')
 
 async def run(robot: cozmo.robot.Robot):
-
-    classifier = imgclassification.ImageClassifier()
-    (data, labels) = classifier.prep('./train/')
+    robot.drive_off_charger_on_connect = False  # Cozmo just stays on the charger
+    robot.camera.image_stream_enabled = True
+    robot.camera.color_image_enabled = True
+    robot.camera.enable_auto_exposure = True
     bot = Bot(robot)
 
+    await bot.say_label("Hello, world!")
     try:
-
         while True:
             event = await robot.world.wait_for(cozmo.camera.EvtNewRawCameraImage, timeout=30)
-            feature_data = classifier.features_from_image(event.image)
+            greyImage = cv2.cvtColor(np.asarray(event.image), cv2.COLOR_RGB2GRAY)
+            feature_data = classifier.features_from_image(greyImage)
 
             #find a card
-            labels = classifier.predict_labels([image])
+            labels = classifier.predict_labels([feature_data])
+            print("labels", labels)
             if len(labels) > 0:
-                bot.say_label(labels[0])
-                bot.wave_hi()
+                await bot.celebrate(labels[0])
                 break
             time.sleep(2)
 
@@ -57,5 +70,4 @@ async def run(robot: cozmo.robot.Robot):
         print(e)
 
 
-cozmo.robot.Robot.drive_off_charger_on_connect = False  # Cozmo just stays on the charger
-cozmo.run_program(run, use_viewer=True, force_viewer_on_top=True)
+cozmo.run_program(run)

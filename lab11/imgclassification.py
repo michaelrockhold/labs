@@ -38,7 +38,7 @@ class ImageClassifier:
 
     def extract_image_features(self, data):
         # extract feature vector from image data
-        return [self.features_from_image(image) for image in data]
+        return [self.features_from_image(color.rgb2gray(image)) for image in data]
 
     def extract_features_and_labels(self, dir):
         # load images
@@ -67,7 +67,7 @@ class ImageClassifier:
         report(data, labels, predicted_labels)
 
     def features_from_image(self, image):
-        return feature.hog(color.rgb2gray(image), orientations=8, pixels_per_cell=(16, 16), cells_per_block=(1, 1), block_norm='L2-Hys')
+        return feature.hog(image, orientations=8, pixels_per_cell=(16, 16), cells_per_block=(1, 1), block_norm='L2-Hys')
 
 
 def report(data, labels, predicted_labels):
