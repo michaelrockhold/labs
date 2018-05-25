@@ -157,7 +157,7 @@
 	<array>
 		<dict>
 			<key>Date</key>
-			<date>2018-05-21T06:21:48Z</date>
+			<date>2018-05-25T14:21:55Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -206,7 +206,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2018-05-21T06:21:48Z</date>
+			<date>2018-05-25T14:21:55Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -257,7 +257,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2018-05-21T06:21:48Z</date>
+			<date>2018-05-25T14:21:55Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -308,7 +308,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2018-05-21T06:21:48Z</date>
+			<date>2018-05-25T14:21:55Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -359,7 +359,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2018-05-21T06:21:48Z</date>
+			<date>2018-05-25T14:21:55Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -420,6 +420,6 @@
 	<key>ViewSplitterPosition:michael</key>
 	<real>0.17499999701976776</real>
 	<key>WindowFrame:michael:displays([(0, 0), (1920, 1080)]:[(-1440, 507), (1440, 900)])</key>
-	<string>rect(22,3,1080,1163)</string>
+	<string>rect(22,7,1080,1167)</string>
 </dict>
 </plist>
