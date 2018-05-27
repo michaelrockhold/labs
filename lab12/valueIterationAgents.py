@@ -13,8 +13,80 @@
 
 
 import mdp, util
+import copy
 
 from learningAgents import ValueEstimationAgent
+
+### Policy
+
+class Policy:
+    """
+    Inspired by Sutton & Barlo, 'Policy Iteration', pg 65
+    """
+    def __init__(self, mdp, discount, threshhold):
+        self.mdp = mdp
+        self.ɣ = discount
+        self.θ = threshhold
+
+        # initialize values and policy arbitrarily
+        self.V = util.Counter()
+
+        self.π = {}
+        a = mdp.getPossibleActions(mdp.getStartState())[0]
+        for s in self.mdp.getStates():
+            self.π[s] = a
+        self.iterate()
+
+
+    def getBestActionForState(self, state):
+        return self.π[state]
+
+    def evaluate(self):
+        while True:
+            Δ = 0
+            for s in self.mdp.getStates():
+                v = self.V[s]
+                self.V[s] = self.summarizeAction(s, self.π[s])
+                Δ = max([Δ, abs(v - self.V[s])])
+            if Δ < self.θ: break
+
+    def improve(self):
+        def find_max_action(s):
+            actions = self.mdp.getPossibleActions(s)
+            if actions == None or len(actions) == 0:
+                raise Exception("no action to take out of %s" % (s,))
+            return max(actions, key=lambda a:self.summarizeAction(s,a))
+
+        policy_stable = True
+        for s in self.mdp.getStates():
+            if self.mdp.isTerminal(s):
+                continue
+            old_action = self.π[s]
+            self.π[s] = find_max_action(s)
+            if old_action != self.π[s]:
+                policy_stable = False
+        return policy_stable
+
+    def iterate(self):
+        while True:
+            self.evaluate()
+            stable = self.improve()
+            if stable: break
+
+    def summarizeAction(self, current_state, action):
+
+        if self.mdp.isTerminal(current_state):
+            return 0
+        if not action in self.mdp.getPossibleActions(current_state):
+            return 0
+
+        def value(st, act, prob, nxt):
+            r = self.mdp.getReward(st,act,nxt)
+            v = self.V[nxt]
+            return prob * (r + self.ɣ * v)
+        return sum([value(current_state, action, probability, nxtState) for (nxtState, probability) in self.mdp.getTransitionStatesAndProbs(current_state,action)])
+
+### ValueIterationAgent
 
 class ValueIterationAgent(ValueEstimationAgent):
     """
@@ -39,24 +111,31 @@ class ValueIterationAgent(ValueEstimationAgent):
               mdp.isTerminal(state)
         """
         self.mdp = mdp
-        self.discount = discount
+        self.ɣ = discount
         self.iterations = iterations
         self.values = util.Counter() # A Counter is a dict with default 0
 
-        # Value Iteration Updating
-        for _ in range(iterations):
-            for state in mdp.getStates():
-                try:
-                    self.values[s] = max([self.calculateValue(state,action) for action in mdp.getPossibleActions(state)])
-                except:
-                    pass
+        # inspired by Sutton & Barto, 4.4 Value Iteration, pg 67
+        def find_max_value(state):
+            if self.mdp.isTerminal(state):
+                return 0
+            return max([(lambda a:self.payoff(state, a))(action) for action in self.mdp.getPossibleActions(state)])
 
+        θ = 0
+        for i in range(self.iterations):
+            Δ = 0
+            kPlus1values = copy.deepcopy(self.values)
+            for s in mdp.getStates():
+                v = self.values[s]
+                kPlus1values[s] = find_max_value(s)
+                Δ = max([Δ, abs(v - kPlus1values[s])])
+            self.values = kPlus1values
+            if Δ < θ:
+                print("INFO: converging? with Δ < θ (%f < %f)" % (Δ, θ))
+                break
 
-    def calculateValue(self, state, action):
-        def body(nxt,p):
-            r = self.mdp.getReward(state, action, nxt)
-            return p * (r + self.discount * self.values[nxt])
-        return sum([body(nextState,probability) for (nextState,probability) in self.mdp.getTransitionStatesAndProbs(state,action)])
+        self.policy = Policy(self.mdp, self.ɣ, 0.12)
+
 
     def getValue(self, state):
         """
@@ -64,17 +143,19 @@ class ValueIterationAgent(ValueEstimationAgent):
         """
         return self.values[state]
 
+    def payoff(self, state, action):
+        def reward(nextState,probability):
+            r = self.mdp.getReward(state, action, nextState)
+            return probability * (r + self.ɣ * self.values[nextState])
+        payoffs = [reward(nxt,prob) for (nxt,prob) in self.mdp.getTransitionStatesAndProbs(state, action)]
+        return sum(payoffs)
 
     def computeQValueFromValues(self, state, action):
         """
           Compute the Q-value of action in state from the
           value function stored in self.values.
         """
-        def calcNxtReward(fromState, toState, probability):
-            reward = self.mdp.getReward(fromState, action, toState)
-            return reward * probability + self.values[toState]
-
-        return sum([calcNxtReward(state, nxtState, probability) for (nxtState, probability) in self.mdp.getTransitionStatesAndProbs(state,action)])
+        return self.payoff(state, action)
 
     def computeActionFromValues(self, state):
         """
@@ -85,12 +166,25 @@ class ValueIterationAgent(ValueEstimationAgent):
           there are no legal actions, which is the case at the
           terminal state, you should return None.
         """
-        try:
-            def calculateStateValueForAction(a):
-                return self.calculateValue(state,a)
-            return max(self.mdp.getPossibleActions(state), f=calculateStateValueForAction)
-        except:
-            return None
+        return self.policy.getBestActionForState(state)
+        def summarizeAction(s, a):
+            if self.mdp.isTerminal(s):
+                return 0
+            if not a in self.mdp.getPossibleActions(s):
+                print("WARN: action %s is not in state %s" % (a, s))
+                return 0
+            def value(st, act, prob, nxt):
+                r = self.mdp.getReward(st,act,nxt)
+                v = self.values[nxt]
+                return prob * (r + self.ɣ * v)
+            return sum([value(s, a, probability, nxtState) for (nxtState, probability) in self.mdp.getTransitionStatesAndProbs(s,a)])
+
+        if self.mdp.isTerminal(state):
+            return 0
+        actions = self.mdp.getPossibleActions(state)
+        if actions == None or len(actions) == 0:
+            raise Exception("no action to take out of %s" % (state,))
+        return max(actions, key=lambda a:summarizeAction(state,a))
 
     def getPolicy(self, state):
         return self.computeActionFromValues(state)
