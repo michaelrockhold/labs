@@ -5,13 +5,56 @@
 	<key>EmbeddedEditorHidden:michael</key>
 	<false/>
 	<key>ExpandedEditorWidth:michael:displays([(0, 0), (1920, 1080)]:[(-1440, 507), (1440, 900)])</key>
-	<integer>827</integer>
+	<integer>663</integer>
 	<key>ExpandedItems:michael</key>
 	<array/>
 	<key>FileFilterMode:michael</key>
 	<integer>0</integer>
 	<key>OpenDocuments:michael</key>
 	<array>
+		<dict>
+			<key>BookmarkData</key>
+			<data>
+			Ym9va5AEAAAAAAQQMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+			AAAAAAAAAAAAaAMAAAUAAAABAQAAVXNlcnMAAAAHAAAAAQEAAG1p
+			Y2hhZWwACAAAAAEBAABQcm9qZWN0cwoAAAABAQAAR3JhZFNjaG9v
+			bAAADwAAAAEBAABjc2VwNTkwcm9ib3RpY3MABAAAAAEBAABsYWJz
+			BQAAAAEBAABsYWIxMgAAAAsAAAABAQAAYW5hbHlzaXMucHkAIAAA
+			AAEGAAAEAAAAFAAAACQAAAA0AAAASAAAAGAAAABsAAAAfAAAAAgA
+			AAAEAwAA3GkGAAAAAAAIAAAABAMAAMSuCQAAAAAACAAAAAQDAACn
+			ow0AAgAAAAgAAAAEAwAApe++AAIAAAAIAAAABAMAAJTv9gACAAAA
+			CAAAAAQDAACY7/YAAgAAAAgAAAAEAwAAC1EuAQIAAAAIAAAABAMA
+			AA1RLgECAAAAIAAAAAEGAAC4AAAAyAAAANgAAADoAAAA+AAAAAgB
+			AAAYAQAAKAEAAAgAAAAABAAAQcBYcM6YGCwYAAAAAQIAAAEAAAAA
+			AAAADwAAAAAAAAAAAAAAAAAAAAAAAAABBQAABAAAAAMDAAABAAAA
+			CAAAAAQDAAAGAAAAAAAAAAQAAAADAwAA9QEAAAgAAAABCQAAZmls
+			ZTovLy8MAAAAAQEAAE1hY2ludG9zaCBIRAgAAAAEAwAAANAAgrsA
+			AAAIAAAAAAQAAEG+t9/xAAAAJAAAAAEBAAA0OTQ2MUYwMC03QTM4
+			LTM1MTctOEEwQy0yMkNCNEJDOTg4N0YYAAAAAQIAAIEAAAABAAAA
+			7xMAAAEAAAAAAAAAAAAAAAEAAAABAQAALwAAABoAAAABAQAATlNV
+			UkxEb2N1bWVudElkZW50aWZpZXJLZXkAAAQAAAADAwAAhVAAANQA
+			AAABAgAAYjBkNDEyOWY5YmMzMjZlMmQ5YmRiMTMwZGJjMGZlMzIy
+			M2M3ZDEyODswMDAwMDAwMDswMDAwMDAwMDswMDAwMDAwMDAwMDAw
+			MDIwO2NvbS5hcHBsZS5hcHAtc2FuZGJveC5yZWFkLXdyaXRlOzAx
+			OzAxMDAwMDA2OzAwMDAwMDAyMDEyZTUxMGQ7L3VzZXJzL21pY2hh
+			ZWwvcHJvamVjdHMvZ3JhZHNjaG9vbC9jc2VwNTkwcm9ib3RpY3Mv
+			bGFicy9sYWIxMi9hbmFseXNpcy5weQDwAAAA/v///wEAAAAAAAAA
+			EwAAAAQQAACQAAAAAAAAAAUQAAA4AQAAAAAAABAQAABwAQAAAAAA
+			AEAQAABgAQAAAAAAAFUQAACYAQAAAAAAAFYQAACQAQAAAAAAAAIg
+			AABQAgAAAAAAAAUgAADAAQAAAAAAABAgAADQAQAAAAAAABEgAAAE
+			AgAAAAAAABIgAADkAQAAAAAAABMgAAD0AQAAAAAAACAgAAAwAgAA
+			AAAAADAgAACQAQAAAAAAAAHAAACkAQAAAAAAABHAAAAUAAAAAAAA
+			ABLAAAC0AQAAAAAAAIDwAACMAgAAAAAAAFwCAICAAgAAAAAAAA==
+			</data>
+			<key>FileURL</key>
+			<string>file:///Users/michael/Projects/GradSchool/csep590robotics/labs/lab12/analysis.py</string>
+			<key>RelativePath</key>
+			<string>./analysis.py</string>
+			<key>TypeID</key>
+			<string>_CFileLocator</string>
+			<key>Version</key>
+			<integer>1</integer>
+		</dict>
 		<dict>
 			<key>BookmarkData</key>
 			<data>
@@ -322,7 +365,56 @@
 	<array>
 		<dict>
 			<key>Date</key>
-			<date>2018-05-26T23:43:03Z</date>
+			<date>2018-05-27T18:15:09Z</date>
+			<key>Location</key>
+			<dict>
+				<key>BookmarkData</key>
+				<data>
+				Ym9vazAEAAAAAAQQMAAAAAAAAAAAAAAAAAAAAAAAAAAA
+				AAAAAAAAAAAAAAAAAAAALAMAAAUAAAABAQAAVXNlcnMA
+				AAAHAAAAAQEAAG1pY2hhZWwACAAAAAEBAABQcm9qZWN0
+				cwoAAAABAQAAR3JhZFNjaG9vbAAADwAAAAEBAABjc2Vw
+				NTkwcm9ib3RpY3MABAAAAAEBAABsYWJzBQAAAAEBAABs
+				YWIxMgAAAAsAAAABAQAAYW5hbHlzaXMucHkAIAAAAAEG
+				AAAEAAAAFAAAACQAAAA0AAAASAAAAGAAAABsAAAAfAAA
+				AAgAAAAEAwAA3GkGAAAAAAAIAAAABAMAAMSuCQAAAAAA
+				CAAAAAQDAACnow0AAgAAAAgAAAAEAwAApe++AAIAAAAI
+				AAAABAMAAJTv9gACAAAACAAAAAQDAACY7/YAAgAAAAgA
+				AAAEAwAAC1EuAQIAAAAIAAAABAMAAA1RLgECAAAAIAAA
+				AAEGAAC4AAAAyAAAANgAAADoAAAA+AAAAAgBAAAYAQAA
+				KAEAAAgAAAAABAAAQcBYcM6YGCwYAAAAAQIAAAEAAAAA
+				AAAADwAAAAAAAAAAAAAAAAAAAAgAAAAEAwAABgAAAAAA
+				AAAEAAAAAwMAAPUBAAAIAAAAAQkAAGZpbGU6Ly8vDAAA
+				AAEBAABNYWNpbnRvc2ggSEQIAAAABAMAAADQAIK7AAAA
+				CAAAAAAEAABBvrff8QAAACQAAAABAQAANDk0NjFGMDAt
+				N0EzOC0zNTE3LThBMEMtMjJDQjRCQzk4ODdGGAAAAAEC
+				AACBAAAAAQAAAO8TAAABAAAAAAAAAAAAAAABAAAAAQEA
+				AC8AAAAAAAAAAQUAANQAAAABAgAAYjBkNDEyOWY5YmMz
+				MjZlMmQ5YmRiMTMwZGJjMGZlMzIyM2M3ZDEyODswMDAw
+				MDAwMDswMDAwMDAwMDswMDAwMDAwMDAwMDAwMDIwO2Nv
+				bS5hcHBsZS5hcHAtc2FuZGJveC5yZWFkLXdyaXRlOzAx
+				OzAxMDAwMDA2OzAwMDAwMDAyMDEyZTUxMGQ7L3VzZXJz
+				L21pY2hhZWwvcHJvamVjdHMvZ3JhZHNjaG9vbC9jc2Vw
+				NTkwcm9ib3RpY3MvbGFicy9sYWIxMi9hbmFseXNpcy5w
+				eQDMAAAA/v///wEAAAAAAAAAEAAAAAQQAACQAAAAAAAA
+				AAUQAAA4AQAAAAAAABAQAABwAQAAAAAAAEAQAABgAQAA
+				AAAAAAIgAAA8AgAAAAAAAAUgAACsAQAAAAAAABAgAAC8
+				AQAAAAAAABEgAADwAQAAAAAAABIgAADQAQAAAAAAABMg
+				AADgAQAAAAAAACAgAAAcAgAAAAAAADAgAABIAgAAAAAA
+				AAHAAACQAQAAAAAAABHAAAAUAAAAAAAAABLAAACgAQAA
+				AAAAAIDwAABQAgAAAAAAAA==
+				</data>
+				<key>FileURL</key>
+				<string>file:///Users/michael/Projects/GradSchool/csep590robotics/labs/lab12/analysis.py</string>
+				<key>TypeID</key>
+				<string>_CFileLocator</string>
+				<key>Version</key>
+				<integer>1</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>Date</key>
+			<date>2018-05-27T18:15:09Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -374,7 +466,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2018-05-26T23:43:03Z</date>
+			<date>2018-05-27T18:15:09Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -423,7 +515,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2018-05-26T23:43:03Z</date>
+			<date>2018-05-27T18:15:09Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -473,7 +565,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2018-05-26T23:43:03Z</date>
+			<date>2018-05-27T18:15:09Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -523,7 +615,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2018-05-26T23:43:03Z</date>
+			<date>2018-05-27T18:15:09Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -572,7 +664,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2018-05-26T23:43:03Z</date>
+			<date>2018-05-27T18:15:09Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -621,7 +713,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2018-05-26T23:43:03Z</date>
+			<date>2018-05-27T18:15:09Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -670,56 +762,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2018-05-26T23:43:03Z</date>
-			<key>Location</key>
-			<dict>
-				<key>BookmarkData</key>
-				<data>
-				Ym9vazAEAAAAAAQQMAAAAAAAAAAAAAAAAAAAAAAAAAAA
-				AAAAAAAAAAAAAAAAAAAALAMAAAUAAAABAQAAVXNlcnMA
-				AAAHAAAAAQEAAG1pY2hhZWwACAAAAAEBAABQcm9qZWN0
-				cwoAAAABAQAAR3JhZFNjaG9vbAAADwAAAAEBAABjc2Vw
-				NTkwcm9ib3RpY3MABAAAAAEBAABsYWJzBQAAAAEBAABs
-				YWIxMgAAAAsAAAABAQAAYW5hbHlzaXMucHkAIAAAAAEG
-				AAAEAAAAFAAAACQAAAA0AAAASAAAAGAAAABsAAAAfAAA
-				AAgAAAAEAwAA3GkGAAAAAAAIAAAABAMAAMSuCQAAAAAA
-				CAAAAAQDAACnow0AAgAAAAgAAAAEAwAApe++AAIAAAAI
-				AAAABAMAAJTv9gACAAAACAAAAAQDAACY7/YAAgAAAAgA
-				AAAEAwAAC1EuAQIAAAAIAAAABAMAAA1RLgECAAAAIAAA
-				AAEGAAC4AAAAyAAAANgAAADoAAAA+AAAAAgBAAAYAQAA
-				KAEAAAgAAAAABAAAQcBYcM6YGCwYAAAAAQIAAAEAAAAA
-				AAAADwAAAAAAAAAAAAAAAAAAAAgAAAAEAwAABgAAAAAA
-				AAAEAAAAAwMAAPUBAAAIAAAAAQkAAGZpbGU6Ly8vDAAA
-				AAEBAABNYWNpbnRvc2ggSEQIAAAABAMAAADQAIK7AAAA
-				CAAAAAAEAABBvrff8QAAACQAAAABAQAANDk0NjFGMDAt
-				N0EzOC0zNTE3LThBMEMtMjJDQjRCQzk4ODdGGAAAAAEC
-				AACBAAAAAQAAAO8TAAABAAAAAAAAAAAAAAABAAAAAQEA
-				AC8AAAAAAAAAAQUAANQAAAABAgAAYjBkNDEyOWY5YmMz
-				MjZlMmQ5YmRiMTMwZGJjMGZlMzIyM2M3ZDEyODswMDAw
-				MDAwMDswMDAwMDAwMDswMDAwMDAwMDAwMDAwMDIwO2Nv
-				bS5hcHBsZS5hcHAtc2FuZGJveC5yZWFkLXdyaXRlOzAx
-				OzAxMDAwMDA2OzAwMDAwMDAyMDEyZTUxMGQ7L3VzZXJz
-				L21pY2hhZWwvcHJvamVjdHMvZ3JhZHNjaG9vbC9jc2Vw
-				NTkwcm9ib3RpY3MvbGFicy9sYWIxMi9hbmFseXNpcy5w
-				eQDMAAAA/v///wEAAAAAAAAAEAAAAAQQAACQAAAAAAAA
-				AAUQAAA4AQAAAAAAABAQAABwAQAAAAAAAEAQAABgAQAA
-				AAAAAAIgAAA8AgAAAAAAAAUgAACsAQAAAAAAABAgAAC8
-				AQAAAAAAABEgAADwAQAAAAAAABIgAADQAQAAAAAAABMg
-				AADgAQAAAAAAACAgAAAcAgAAAAAAADAgAABIAgAAAAAA
-				AAHAAACQAQAAAAAAABHAAAAUAAAAAAAAABLAAACgAQAA
-				AAAAAIDwAABQAgAAAAAAAA==
-				</data>
-				<key>FileURL</key>
-				<string>file:///Users/michael/Projects/GradSchool/csep590robotics/labs/lab12/analysis.py</string>
-				<key>TypeID</key>
-				<string>_CFileLocator</string>
-				<key>Version</key>
-				<integer>1</integer>
-			</dict>
-		</dict>
-		<dict>
-			<key>Date</key>
-			<date>2018-05-26T23:43:03Z</date>
+			<date>2018-05-27T18:15:09Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -768,7 +811,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2018-05-26T23:43:03Z</date>
+			<date>2018-05-27T18:15:09Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -825,8 +868,8 @@
 	<key>ToolbarVisible:michael</key>
 	<false/>
 	<key>ViewSplitterPosition:michael</key>
-	<real>0.19708737730979919</real>
+	<real>0.2344110906124115</real>
 	<key>WindowFrame:michael:displays([(0, 0), (1920, 1080)]:[(-1440, 507), (1440, 900)])</key>
-	<string>rect(22,0,1080,1030)</string>
+	<string>rect(23,0,1081,866)</string>
 </dict>
 </plist>
