@@ -37,12 +37,14 @@ class QLearningAgent(ReinforcementAgent):
       Functions you should use
         - self.getLegalActions(state)
           which returns legal actions for a state
+
+      This implementation due mostly to explanation in Sutton & Barto, 6.5
     """
     def __init__(self, **args):
         "You can initialize Q-values here..."
         ReinforcementAgent.__init__(self, **args)
 
-        "*** YOUR CODE HERE ***"
+        self.qValues = util.Counter()
 
     def getQValue(self, state, action):
         """
@@ -50,8 +52,10 @@ class QLearningAgent(ReinforcementAgent):
           Should return 0.0 if we have never seen a state
           or the Q node value otherwise
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        if self.isTerminal(state):
+            return 0.0
+        else:
+            return self.qValues[(state,action)]
 
 
     def computeValueFromQValues(self, state):
@@ -61,8 +65,7 @@ class QLearningAgent(ReinforcementAgent):
           there are no legal actions, which is the case at the
           terminal state, you should return a value of 0.0.
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return self.max_action(state)
 
     def computeActionFromQValues(self, state):
         """
@@ -70,11 +73,19 @@ class QLearningAgent(ReinforcementAgent):
           are no legal actions, which is the case at the terminal state,
           you should return None.
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        legalActions = self.getLegalActions(state)
+        if len(legalActions) == 0:
+            return None
+
+        def valueForAction(action):
+            return self.qValues[(state,action)]
+
+        return max(legalActions, key=valueForAction)
 
     def getAction(self, state):
         """
+          Line 5 in the pseudo-code on page 107: "Choose A from S using policy derived from Q (e.g., ε-greedy)"
+
           Compute the action to take in the current state.  With
           probability self.epsilon, we should take a random action and
           take the best policy action otherwise.  Note that if there are
@@ -84,13 +95,22 @@ class QLearningAgent(ReinforcementAgent):
           HINT: You might want to use util.flipCoin(prob)
           HINT: To pick randomly from a list, use random.choice(list)
         """
-        # Pick Action
         legalActions = self.getLegalActions(state)
-        action = None
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        if len(legalActions) == 0:
+            return None
 
-        return action
+        if util.flipCoin(self.epsilon):
+            return random.choice(legalActions)
+
+        return self.computeActionFromQValues(state)
+
+    def max_action(self, s):
+        if self.isTerminal(s):
+            return 0.0
+        return max([self.qValues[(s, a)] for a in self.getLegalActions(s)])
+
+    def more(self, state, action, nextState, reward):
+        return self.alpha * (reward + self.discount * self.max_action(nextState) - self.qValues[(state, action)])
 
     def update(self, state, action, nextState, reward):
         """
@@ -101,14 +121,16 @@ class QLearningAgent(ReinforcementAgent):
           NOTE: You should never call this function,
           it will be called on your behalf
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        self.qValues[(state,action)] = self.qValues[(state,action)] + self.more(state, action, nextState, reward)
 
     def getPolicy(self, state):
         return self.computeActionFromQValues(state)
 
     def getValue(self, state):
         return self.computeValueFromQValues(state)
+
+    def isTerminal(self,state):
+        return len(self.getLegalActions(state)) == 0
 
 
 class PacmanQAgent(QLearningAgent):
