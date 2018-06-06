@@ -14,7 +14,7 @@ except ImportError:
 
 
 def find_ball(opencv_image, debug=False):
-    return __find_ball(opencv_image, debug, gaussian(3), hough(180,25))
+    return ballFinders[5](opencv_image)
 
 def median(k):
     def m(img):
@@ -62,7 +62,7 @@ def __find_ball(opencv_image, debug, blurfn, circlefn):
     except Exception as exc:
         if debug:
             print("no circles: ", exc)
-        return [0,0,0]
+        return None
 
 
 def display(img, t):
@@ -107,6 +107,21 @@ def display_circles(opencv_image, circles, best=None):
 
     display(circle_image)
 
+def ballFinder(p1, p2, blurrer, ksize):
+    def b(img):
+        return find_ball_with_params(img, p1, p2, blurrer, ksize)
+    return b
+
+# autogrinder discovered 7 decent ball finders:
+ballFinders = [
+    ballFinder(160, 25, "median", 9),
+    ballFinder(170, 25, "median", 9),
+    ballFinder(180, 25, "median", 9),
+    ballFinder(190, 25, "median", 9),
+    ballFinder(170, 25, "gaussian", 3),
+    ballFinder(180, 25, "gaussian", 3),
+    ballFinder(30, 35,  "gaussian", 9)
+]
 
 if __name__ == "__main__":
     for f in ['test87.bmp']:
